@@ -98,7 +98,7 @@ Value: https://marketing-agent-backend-xxxx.onrender.com
 
 ### Test It:
 1. Visit your Vercel URL
-2. Login with: `demo@marketing.ai` / `demo123`
+2. Login with: `nurettin@vespersocial.com` / `Paloma12Agent.34`
 3. Ask: "How is Meta performing today?"
 4. See beautiful charts! 📊
 
