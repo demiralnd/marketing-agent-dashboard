@@ -192,19 +192,19 @@ function PerformanceChart({ data, title, platform }: { data: ChartData[]; title:
         {
             id: "Spend",
             color: platform === "meta" ? "hsl(221, 83%, 53%)" : "hsl(158, 64%, 52%)",
-            data: data.map(d => ({ x: d.date, y: d.Spend || 0 }))
+            data: data.map(d => ({ x: d.date || '', y: d.Spend || 0 }))
         },
         {
             id: "Clicks",
             color: "hsl(271, 91%, 65%)",
-            data: data.map(d => ({ x: d.date, y: d.Clicks || 0 }))
+            data: data.map(d => ({ x: d.date || '', y: d.Clicks || 0 }))
         }
     ];
 
     const roasData = [{
         id: "ROAS",
         color: "hsl(152, 69%, 31%)",
-        data: data.map(d => ({ x: d.date, y: d.ROAS || 0 }))
+        data: data.map(d => ({ x: d.date || '', y: d.ROAS || 0 }))
     }];
 
     return (
