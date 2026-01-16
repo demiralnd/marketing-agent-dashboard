@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Send, Loader2, Settings, RefreshCw, LogOut, User, Sparkles, TrendingUp, BarChart3, LineChart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,8 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
   DropdownMenuSeparator as DropdownMenuSeparator2,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MessageBubble } from "@/components/dashboard/message-bubble";
 import { ChartRenderer } from "@/components/dashboard/chart-renderer";
@@ -34,7 +35,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [user] = useState({ name: "Demo User", email: "demo@marketing.ai" });
+  const [user] = useState({ name: "Paloma Admin", email: "nurettin@vespersocial.com" });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -147,11 +148,17 @@ export default function Home() {
           >
             <div className="relative">
               <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#6a9dbe] to-[#4a7d9e] flex items-center justify-center shadow-lg shadow-[#6a9dbe]/30 animate-glow">
-                <TrendingUp className="w-6 h-6 text-white" />
+                <Image
+                  src="/paloma-logo.png"
+                  alt="Paloma Logo"
+                  width={100}
+                  height={100}
+                  className="w-8 h-auto object-contain brightness-0 invert"
+                />
               </div>
             </div>
             <div>
-              <h1 className="text-xl font-bold gradient-text">Marketing Agent</h1>
+              <h1 className="text-xl font-bold gradient-text">Paloma Marketing Agent</h1>
               <p className="text-xs text-gray-600 font-medium">AI-Powered Analytics Platform</p>
             </div>
           </motion.div>

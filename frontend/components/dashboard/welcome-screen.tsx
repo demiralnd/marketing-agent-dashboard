@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { BarChart3, LineChart, Zap, Target, DollarSign, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,13 @@ export function WelcomeScreen({ onSuggestionClick }: WelcomeScreenProps) {
                 className="relative mb-8"
             >
                 <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-[#6a9dbe] to-[#4a7d9e] flex items-center justify-center shadow-2xl shadow-[#6a9dbe]/40 animate-float">
-                    <TrendingUp className="w-14 h-14 text-white" />
+                    <Image
+                        src="/paloma-logo.png"
+                        alt="Paloma Logo"
+                        width={250}
+                        height={250}
+                        className="w-24 h-auto object-contain brightness-0 invert"
+                    />
                 </div>
                 <motion.div
                     className="absolute -inset-6 rounded-full bg-gradient-to-r from-[#6a9dbe] to-[#8ab5d1] blur-3xl opacity-20"

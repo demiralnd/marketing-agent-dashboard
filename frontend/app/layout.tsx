@@ -13,12 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Marketing Agent | AI-Powered Ads Analytics",
+  title: "Paloma Marketing Agent | AI-Powered Ads Analytics",
   description: "Unified Marketing Intelligence Agent connecting Meta Ads & Google Ads into a powerful chat interface. Get insights, analyze performance, and optimize your ad spend with AI.",
   keywords: ["marketing", "ads", "analytics", "meta ads", "google ads", "ai", "dashboard"],
-  authors: [{ name: "Marketing Agent" }],
+  authors: [{ name: "Paloma Marketing Agent" }],
   openGraph: {
-    title: "Marketing Agent | AI-Powered Ads Analytics",
+    title: "Paloma Marketing Agent | AI-Powered Ads Analytics",
     description: "Your AI-powered assistant for Meta & Google Ads analytics",
     type: "website",
   },

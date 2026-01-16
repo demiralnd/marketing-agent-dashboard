@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, TrendingUp, Shield, Zap, BarChart3 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -18,18 +19,18 @@ export default function LoginPage() {
         setLoading(true);
         setError("");
 
-        // Demo authentication
-        if (email === "demo@marketing.ai" && password === "demo123") {
+        // Authentication
+        if (email === "nurettin@vespersocial.com" && password === "Paloma12Agent.34") {
             sessionStorage.setItem("authenticated", "true");
             sessionStorage.setItem("user", JSON.stringify({
-                name: "Demo User",
-                email: "demo@marketing.ai"
+                name: "Paloma Admin",
+                email: "nurettin@vespersocial.com"
             }));
 
             router.push("/");
             router.refresh();
         } else {
-            setError("Invalid credentials. Try: demo@marketing.ai / demo123");
+            setError("Invalid credentials.");
             setLoading(false);
         }
     };
@@ -60,10 +61,16 @@ export default function LoginPage() {
                             transition={{ delay: 0.2, type: "spring" }}
                             className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#6a9dbe] to-[#4a7d9e] shadow-2xl shadow-[#6a9dbe]/40 mb-6 animate-float"
                         >
-                            <TrendingUp className="w-10 h-10 text-white" />
+                            <Image
+                                src="/paloma-logo.png"
+                                alt="Paloma Logo"
+                                width={200}
+                                height={200}
+                                className="w-16 h-auto object-contain brightness-0 invert"
+                            />
                         </motion.div>
                         <h1 className="text-5xl font-bold mb-4">
-                            <span className="gradient-text">Marketing Agent</span>
+                            <span className="gradient-text">Paloma Marketing Agent</span>
                         </h1>
                         <p className="text-xl text-gray-600 font-medium">
                             Your AI-powered assistant for Meta & Google Ads analytics
@@ -105,9 +112,15 @@ export default function LoginPage() {
                         {/* Mobile Logo */}
                         <div className="lg:hidden text-center mb-8">
                             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6a9dbe] to-[#4a7d9e] shadow-2xl shadow-[#6a9dbe]/40 mb-4">
-                                <TrendingUp className="w-8 h-8 text-white" />
+                                <Image
+                                    src="/paloma-logo.png"
+                                    alt="Paloma Logo"
+                                    width={100}
+                                    height={100}
+                                    className="w-12 h-auto object-contain brightness-0 invert"
+                                />
                             </div>
-                            <h2 className="text-2xl font-bold gradient-text">Marketing Agent</h2>
+                            <h2 className="text-2xl font-bold gradient-text">Paloma Marketing Agent</h2>
                         </div>
 
                         <div className="mb-8">
@@ -220,10 +233,10 @@ export default function LoginPage() {
                         <div className="mt-8 p-4 bg-gradient-to-br from-[#6a9dbe]/10 to-[#8ab5d1]/10 rounded-xl border border-[#6a9dbe]/20">
                             <p className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                                 <Shield className="w-4 h-4 text-[#6a9dbe]" />
-                                Demo Credentials
+                                Login Credentials
                             </p>
-                            <p className="text-xs text-gray-700 font-mono">Email: demo@marketing.ai</p>
-                            <p className="text-xs text-gray-700 font-mono">Password: demo123</p>
+                            <p className="text-xs text-gray-700 font-mono">Email: nurettin@vespersocial.com</p>
+                            <p className="text-xs text-gray-700 font-mono">Password: Paloma12Agent.34</p>
                         </div>
                     </Card>
 

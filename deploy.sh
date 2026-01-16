@@ -31,7 +31,14 @@ echo -e "${BLUE}Step 2: GitHub Repository Setup${NC}"
 echo "Please create a GitHub repository and provide the URL"
 echo "Example: https://github.com/yourusername/marketing-agent.git"
 echo ""
-read -p "Enter your GitHub repository URL: " GITHUB_URL
+# Auto-detect GitHub URL
+GITHUB_URL=$(git remote get-url origin 2>/dev/null)
+
+if [ -z "$GITHUB_URL" ]; then
+    read -p "Enter your GitHub repository URL: " GITHUB_URL
+else
+    echo -e "${GREEN}✓ Found GitHub repository: $GITHUB_URL${NC}"
+fi
 
 if [ ! -z "$GITHUB_URL" ]; then
     echo "Adding GitHub remote..."
