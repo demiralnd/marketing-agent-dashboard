@@ -2,6 +2,7 @@ import os
 import random
 import requests
 from datetime import datetime, timedelta
+from fastapi import HTTPException
 
 # Hard‑coded Meta credentials (fallback – should match Render env vars)
 META_APP_ID = "1926345315432502"
@@ -15,7 +16,13 @@ def _has_credentials():
         "META_APP_ID",
         "META_APP_SECRET",
     ]
-    return all(os.getenv(var) for var in required)
+    missing = [var for var in required if not os.getenv(var)]
+    if missing:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Missing Meta credentials: {', '.join(missing)}. Please add them to Render environment variables."
+        )
+    return True
 
 # ---------------------------------------------------------------------------
 # Mock data generators (used when credentials are missing or API fails)
@@ -55,17 +62,20 @@ def _mock_campaign_summary():
 # Real API calls – only executed when credentials are present
 # ---------------------------------------------------------------------------
 def _api_get(url, params):
-    """Wrapper around requests.get that returns JSON or raises.
-    Includes a short timeout and basic error handling.
-    """
+    """Wrapper around requests.get that returns JSON or raises an HTTPException with the API error."""
     try:
         resp = requests.get(url, params=params, timeout=10)
         resp.raise_for_status()
         return resp.json()
+    except requests.HTTPError as http_err:
+        try:
+            err_json = resp.json()
+            msg = err_json.get("error", {}).get("message", str(http_err))
+        except Exception:
+            msg = str(http_err)
+        raise HTTPException(status_code=resp.status_code, detail=f"Meta API request failed: {msg}")
     except Exception as e:
-        # In production we would log this; for now we fall back to mock.
-        print(f"Meta API request failed: {e}")
-        return None
+        raise HTTPException(status_code=500, detail=f"Meta API request failed: {e}")
 
 def get_meta_insights():
     """Fetch daily spend, clicks and ROAS for the last 7 days.
@@ -92,7 +102,7 @@ def get_meta_insights():
     }
     result = _api_get(url, params)
     if not result or "data" not in result:
-        return _mock_insights()
+        raise HTTPException(status_code=502, detail="Meta API returned no data for insights.")
 
     data = []
     for entry in result["data"]:
@@ -112,8 +122,7 @@ def get_meta_insights():
             "Clicks": clicks,
         })
     if len(data) < 7:
-        missing = 7 - len(data)
-        data.extend(_mock_insights()[:missing])
+        raise HTTPException(status_code=502, detail="Meta API returned incomplete insights data.")
     return data
 
 def get_meta_campaign_summary():
@@ -133,7 +142,7 @@ def get_meta_campaign_summary():
     }
     result = _api_get(url, params)
     if not result or "data" not in result:
-        return _mock_campaign_summary()
+        raise HTTPException(status_code=502, detail="Meta API returned no data for campaign summary.")
 
     data = []
     for camp in result["data"]:

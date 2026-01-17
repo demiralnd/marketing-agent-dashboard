@@ -1,0 +1,78 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0\fswiss Helvetica;}}
+{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}
+\fs24
+\b Google Ads Integration Documentation for Paloma Marketing Agent\b0\par
+\par
+\b Overview\b0\par
+This document describes the steps required to configure real Google Ads API access for the Paloma Marketing Agent application. It covers creating OAuth credentials, obtaining a developer token, generating a refresh token, and configuring the Render environment variables.\par
+\par
+\b 1. Create OAuth 2.0 Client (Desktop)\b0\par
+1. Open the Google Cloud Console: https://console.cloud.google.com/\par
+2. Select the project "paloma‑hotels‑483522" (or your own project).\par
+3. In the left navigation choose **APIs & Services → Credentials**.\par
+4. Click **+ CREATE CREDENTIALS → OAuth client ID**.\par
+5. If prompted, configure the consent screen (External, App name: "Paloma Marketing Agent", your email as support/contact). Save.\par
+6. In the **Create OAuth client ID** dialog select **Application type: Desktop app** and name it "Paloma Marketing Agent Desktop".\par
+7. Click **Create**. A dialog shows **Client ID** and **Client secret**. Copy both values.\par
+\par
+\b 2. Enable Google Ads API\b0\par
+1. Still in the Cloud Console, go to **APIs & Services → Library**.\par
+2. Search for "Google Ads API" and click **Enable**.\par
+\par
+\b 3. Obtain a Developer Token\b0\par
+1. Open the Google Ads UI: https://ads.google.com/\par
+2. Navigate to **Tools & Settings → API Center** (or directly https://ads.google.com/aw/apicenter).\par
+3. If you do not have a token, click **Apply for access** and fill the short form (company name, website, intended use).\par
+4. After approval you will see a token such as **9rZMA93JZ7oDLs9hxMl2vw**.\par
+5. **Important:** The token must be set to **Standard (Production)** – Explorer/Test access only works with Google’s sandbox and will not return real data.\par
+\par
+\b 4. Find your Customer ID\b0\par
+1. In the Google Ads UI, the Customer ID appears in the top‑right corner (10‑digit number, e.g., 1234567890).\par
+2. Copy the digits **without** the "act_" prefix or dashes.\par
+\par
+\b 5. Generate a Refresh Token\b0\par
+We provide a helper script that performs the OAuth flow and returns a long‑lived refresh token.\par
+\par
+**Run the script:**\par
+```bash\par
+cd "/Users/nurettindemiral/Desktop/Ad Chat/marketing-agent-root"\par
+source venv/bin/activate\par
+pip install google-auth-oauthlib  # if not already installed\par
+python backend/get_google_tokens.py\par
+```\par
+When prompted, paste the **Client ID** and **Client Secret** from step 1.\par
+A browser window will open – sign in with the Google account that owns the Ads account and click **Allow**.\par
+The script will output three lines, the last one being:\par
+```
+GOOGLE_REFRESH_TOKEN=1//YOUR_LONG_REFRESH_TOKEN\n```\par
+Copy the entire token (it starts with `1//`).\par
+\par
+\b 6. Add Environment Variables to Render\b0\par
+Open your Render dashboard → **marketing‑agent‑backend → Environment** and add the following variables (click **Add Environment Variable** for each):\par
+\par
+| Name | Value |
+|------|-------|
+| GOOGLE_CLIENT_ID | 1083195694272-dmhbdjhop4nslg4vtvk5154tcrdhsau8.apps.googleusercontent.com |
+| GOOGLE_CLIENT_SECRET | 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 |
+| GOOGLE_REFRESH_TOKEN | 1//YOUR_LONG_REFRESH_TOKEN |
+| GOOGLE_DEVELOPER_TOKEN | 9rZMA93JZ7oDLs9hxMl2vw |
+| GOOGLE_CUSTOMER_ID | 1234567890 |
+| USE_MOCK_DATA | false (or delete) |
+\par
+After saving, Render will automatically redeploy the service. Wait until the deployment status shows **Live**.\par
+\par
+\b 7. Verify the Integration\b0\par
+1. Open the front‑end URL: https://marketing-agent-dashboard.vercel.app/\par
+2. Log in with your Paloma credentials.\par
+3. In the chat, type: `How is Google Ads performing?`\par
+You should see a chart titled **Google Ads Performance** populated with real spend, ROAS, clicks, and conversions for the last 7 days.\par
+\par
+\b Troubleshooting\b0\par
+- If you still see mock data, ensure `USE_MOCK_DATA` is not set to `true`.\par
+- Check the Render **Logs** for messages like "Missing environment variable" or "GoogleAdsException".\par
+- Verify that the developer token status is **Standard** (Production).\par
+- Make sure the refresh token was generated with the same Google account that owns the Ads account.\par
+\par
+\b End of Document\b0\par
+}
