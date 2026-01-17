@@ -79,11 +79,18 @@ export default function Home() {
     setLoading(true);
 
     try {
+      // Use AbortController for 90 second timeout (Render cold starts can take 30-60s)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 90000);
+
       const res = await fetch(`${API_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!res.ok) {
         throw new Error(`Server error: ${res.status}`);
@@ -93,12 +100,15 @@ export default function Home() {
       setMessages((prev) => [...prev, data]);
     } catch (err) {
       console.error("Chat error:", err);
-      setError("Failed to connect to the server. Make sure the backend is running.");
+      const errorMessage = err instanceof Error && err.name === 'AbortError'
+        ? "Request timed out. The server may be waking up - please try again."
+        : "Failed to connect to the server. Please try again in a moment.";
+      setError(errorMessage);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "Sorry, I couldn't connect to the server. Please make sure the backend is running on port 8000.",
+          content: "Sorry, I couldn't connect to the server. The server may be starting up (this can take up to 60 seconds on first request). Please try again.",
         },
       ]);
     } finally {
