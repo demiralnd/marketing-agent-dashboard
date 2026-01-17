@@ -10,11 +10,11 @@ META_APP_SECRET = "034f6aa9382e1e6cee8ce4e21b8842c0"
 
 # Helper to check if all required env vars are present
 def _has_credentials():
+    # Only ACCESS_TOKEN and AD_ACCOUNT_ID are required from env vars
+    # APP_ID and APP_SECRET have hardcoded fallbacks above
     required = [
         "META_ACCESS_TOKEN",
         "META_AD_ACCOUNT_ID",
-        "META_APP_ID",
-        "META_APP_SECRET",
     ]
     missing = [var for var in required if not os.getenv(var)]
     if missing:
